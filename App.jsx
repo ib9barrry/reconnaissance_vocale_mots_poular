@@ -43,29 +43,14 @@ export default function App() {
   const [recording, setRecording] = React.useState();
   const [message, setMessage] = React.useState("");
   const [isrecording  , setIsrecording] = React.useState(false);
+  // lienApi est le lien de L'Api de reconnaissance vocale.
+  // on enregistre le son, puis on l'envoie a L'Api => ensuite , L'Api passe l'Audio a notre modele CNN 'le CNN fait une classification'
+  // ensuite on recupere la classe predict , nous la faisons correspondre un dictionnaire, ou { 0,1,2,3 } sont les classes predicts et 'djarama , tanaala, djantoum, awa' leurs correspondences   
   const [lienApi , setLienApi] = React.useState("http://a45c-35-204-55-233.ngrok.io/post_mot_poular");
 
 
   const [fran , setFran ] = useState('');
   const [pou , setPou ] = useState('');
-
-/*
-  useEffect(()=>{
-    // Get ngrok API link from google drive file.
-
-    if(lienApi === "" || lienApi ==='fff'){
-      let l = "";
-      fetch('https://docs.google.com/uc?export=download&id=1wkZP3LQ2WRp3FKvtKM_2JINXWOYRthBO')
-        .then(response => response.text())
-        .then(data => {
-          let ll = data.split("#");
-          l = ll[1];
-          setLienApi(l);
-          console.log("Lien de L'API est :", l);
-        });
-    }
-  });
-*/
 
   async function startRecording() {
     try {
@@ -96,16 +81,11 @@ export default function App() {
 
     await recording.stopAndUnloadAsync();
     setIsActive(false);
-    //const info = await FileSystem.getInfoAsync(recording.getURI() || "");
     const info = recording.getURI() || "" ;
     let formData = new FormData();
     const uri = info
     let apiUrl = lienApi ;
-    //let apiUrl = 'http://192.168.1.18:5000/post_data'; 
-    //let uriParts = uri.split('.');
-    let fileType = '.m4a'
-    console.log("\n\nInfo file : " , uri);
-   
+    let fileType = '.m4a'   
     formData.append('file', {
       uri,
       name: `recording.${fileType}`,
@@ -131,9 +111,6 @@ export default function App() {
     setIsrecording(!isrecording);
   }
 
-  toggle = () => {
-    setIsActive(!isActive);
-  }
 
   reset = () => {
     setRemainingSecs(0);
